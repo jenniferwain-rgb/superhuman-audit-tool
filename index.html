@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superhuman Voice & Tone Audit Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Origin-inspired Brand Colors - Superhuman Palette */
+            --brand-primary: #0066FF;
+            --brand-primary-hover: #0052CC;
+            --brand-primary-light: #EBF3FF;
+            --brand-accent: #00C9FF;
+
+            /* Semantic Colors - Success */
+            --success: #00B67A;
+            --success-subdued: #E6F8F2;
+            --success-border: #B3E5D6;
+
+            /* Semantic Colors - Warning */
+            --warning: #FF9F40;
+            --warning-subdued: #FFF4E5;
+            --warning-border: #FFE0B3;
+
+            /* Semantic Colors - Critical */
+            --critical: #FF4757;
+            --critical-subdued: #FFEBEE;
+            --critical-border: #FFCDD2;
+
+            /* Neutral Colors - Origin Design System */
+            --neutral-0: #FFFFFF;
+            --neutral-5: #FAFBFC;
+            --neutral-10: #F5F7F9;
+            --neutral-20: #E8ECF0;
+            --neutral-30: #D4DAE1;
+            --neutral-40: #B8C1CC;
+            --neutral-50: #9AA4B2;
+            --neutral-60: #73808C;
+            --neutral-70: #505B66;
+            --neutral-80: #3D4852;
+            --neutral-90: #252E38;
+            --neutral-100: #0F1419;
+
+            /* Semantic Token Application */
+            --color-background-base: var(--neutral-5);
+            --color-background-surface: var(--neutral-0);
+            --color-background-brand-default: var(--brand-primary);
+            --color-background-brand-subdued: var(--brand-primary-light);
+            --color-background-success-default: var(--success);
+            --color-background-success-subdued: var(--success-subdued);
+            --color-background-warning-default: var(--warning);
+            --color-background-warning-subdued: var(--warning-subdued);
+            --color-background-critical-default: var(--critical);
+            --color-background-critical-subdued: var(--critical-subdued);
+
+            --color-border-base: var(--neutral-20);
+            --color-border-subdued: var(--neutral-10);
+            --color-border-brand: var(--brand-primary);
+            --color-border-success: var(--success-border);
+            --color-border-warning: var(--warning-border);
+            --color-border-critical: var(--critical-border);
+
+            --color-text-default: var(--neutral-100);
+            --color-text-subdued: var(--neutral-70);
+            --color-text-inverse: var(--neutral-0);
+            --color-text-brand: var(--brand-primary);
+            --color-text-success: var(--success);
+            --color-text-warning: #D97800;
+            --color-text-critical: #E03E4D;
+
+            /* Spacing (Origin spacing scale) */
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-5: 20px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --space-10: 40px;
+            --space-12: 48px;
+
+            /* Border Radius (Origin scale) */
+            --radius-small: 4px;
+            --radius-medium: 6px;
+            --radius-large: 8px;
+            --radius-xlarge: 12px;
+
+            /* Elevation (Origin shadows) */
+            --elevation-low: 0 1px 3px rgba(15, 20, 25, 0.08);
+            --elevation-medium: 0 4px 12px rgba(15, 20, 25, 0.12);
+            --elevation-high: 0 8px 24px rgba(15, 20, 25, 0.16);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--color-text-default);
+            background: var(--color-background-base);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-5);
+        }
+
+        /* Header */
+        header {
+            background: var(--color-background-surface);
+            border-bottom: 2px solid var(--color-border-base);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--elevation-low);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4) 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-default);
+        }
+
+        .logo span {
+            color: var(--color-text-brand);
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--color-background-surface);
+            border-bottom: 1px solid var(--color-border-base);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0;
+            list-style: none;
+            overflow-x: auto;
+        }
+
+        .nav-tabs li {
+            flex-shrink: 0;
+        }
+
+        .nav-tabs button {
+            padding: var(--space-4) var(--space-6);
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--color-text-subdued);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav-tabs button:hover {
+            color: var(--color-text-brand);
+            background: var(--neutral-10);
+        }
+
+        .nav-tabs button.active {
+            color: var(--color-text-brand);
+            border-bottom-color: var(--color-border-brand);
+        }
+
+        /* Main Content */
+        main {
+            padding: var(--space-8) 0;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--color-background-surface);
+            border-radius: var(--radius-large);
+            padding: var(--space-8);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--elevation-low);
+            border: 1px solid var(--color-border-subdued);
+        }
+
+        .card h2 {
+            font-size: 1.75rem;
+            margin-bottom: var(--space-4);
+            color: var(--color-text-default);
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-top: var(--space-6);
+            margin-bottom: var(--space-3);
+            color: var(--color-text-default);
+        }
+
+        .card h4 {
+            font-size: 1.1rem;
+            margin-top: var(--space-4);
+            margin-bottom: var(--space-2);
+            color: var(--color-text-subdued);
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: var(--space-2) 0;
+            display: flex;
+            align-items: start;
+            gap: var(--space-3);
+        }
+
+        .checklist input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-top: 2px;
+            accent-color: var(--brand-primary);
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-small);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-right: var(--space-2);
+        }
+
+        .badge.success {
+            background: var(--color-background-success-subdued);
+            color: var(--color-text-success);
+        }
+
+        .badge.warning {
+            background: var(--color-background-warning-subdued);
+            color: var(--color-text-warning);
+        }
+
+        .badge.danger {
+            background: var(--color-background-critical-subdued);
+            color: var(--color-text-critical);
+        }
+
+        .badge.info {
+            background: var(--color-background-brand-subdued);
+            color: var(--color-text-brand);
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-4) 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: var(--space-3);
+            text-align: left;
+            border-bottom: 1px solid var(--color-border-base);
+        }
+
+        th {
+            background: var(--neutral-10);
+            font-weight: 600;
+            color: var(--color-text-subdued);
+        }
+
+        tr:hover {
+            background: var(--neutral-5);
+        }
+
+        /* Copy Block */
+        .copy-block {
+            background: var(--neutral-10);
+            border-left: 4px solid var(--color-border-brand);
+            padding: var(--space-4);
+            margin: var(--space-4) 0;
+            border-radius: var(--radius-medium);
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .copy-block.success {
+            border-left-color: var(--color-border-success);
+            background: var(--color-background-success-subdued);
+        }
+
+        .copy-block.danger {
+            border-left-color: var(--color-border-critical);
+            background: var(--color-background-critical-subdued);
+        }
+
+        /* Button */
+        .btn {
+            padding: var(--space-3) var(--space-6);
+            background: var(--color-background-brand-default);
+            color: var(--color-text-inverse);
+            border: none;
+            border-radius: var(--radius-medium);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            box-shadow: var(--elevation-low);
+        }
+
+        .btn:hover {
+            background: var(--brand-primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--elevation-medium);
+        }
+
+        .btn-secondary {
+            background: var(--neutral-10);
+            color: var(--color-text-default);
+        }
+
+        .btn-secondary:hover {
+            background: var(--neutral-20);
+        }
+
+        /* Score Input */
+        .score-input {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-6);
+            margin: var(--space-6) 0;
+        }
+
+        .score-item {
+            background: var(--color-background-surface);
+            padding: var(--space-5);
+            border-radius: var(--radius-large);
+            border: 2px solid var(--color-border-subdued);
+            transition: all 0.2s ease;
+            box-shadow: var(--elevation-low);
+        }
+
+        .score-item:hover {
+            border-color: var(--color-border-brand);
+            box-shadow: var(--elevation-medium);
+            transform: translateY(-2px);
+        }
+
+        .score-item label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+            color: var(--color-text-subdued);
+        }
+
+        .score-item input[type="range"] {
+            width: 100%;
+            margin: var(--space-3) 0;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .score-item input[type="range"]::-webkit-slider-track {
+            width: 100%;
+            height: 6px;
+            background: var(--neutral-20);
+            border-radius: 999px;
+        }
+
+        .score-item input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--brand-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 102, 255, 0.3);
+        }
+
+        .score-item input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 8px rgba(0, 102, 255, 0.4);
+        }
+
+        .score-item input[type="range"]::-moz-range-track {
+            width: 100%;
+            height: 6px;
+            background: var(--neutral-20);
+            border-radius: 999px;
+        }
+
+        .score-item input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--brand-primary);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 102, 255, 0.3);
+        }
+
+        .score-item input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 8px rgba(0, 102, 255, 0.4);
+        }
+
+        .score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-brand);
+        }
+
+        /* Banned Words Grid */
+        .banned-words {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: var(--space-3);
+            margin: var(--space-4) 0;
+        }
+
+        .banned-word {
+            background: var(--color-background-critical-default);
+            color: var(--color-text-inverse);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-medium);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Comparison */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-6);
+            margin: var(--space-6) 0;
+        }
+
+        .comparison-item {
+            padding: var(--space-6);
+            border-radius: var(--radius-large);
+        }
+
+        .comparison-item.bad {
+            background: var(--color-background-critical-subdued);
+            border: 2px solid var(--color-border-critical);
+        }
+
+        .comparison-item.good {
+            background: var(--color-background-success-subdued);
+            border: 2px solid var(--color-border-success);
+        }
+
+        .comparison-item h4 {
+            margin-top: 0;
+            margin-bottom: var(--space-4);
+        }
+
+        /* Audit Results */
+        .audit-result {
+            background: var(--color-background-surface);
+            border: 2px solid var(--color-border-base);
+            border-radius: var(--radius-large);
+            padding: var(--space-6);
+            margin: var(--space-4) 0;
+        }
+
+        .audit-result.strong {
+            border-color: var(--color-border-success);
+            background: var(--success-subdued);
+        }
+
+        .audit-result.partial {
+            border-color: var(--color-border-warning);
+            background: var(--warning-subdued);
+        }
+
+        .audit-result.misaligned {
+            border-color: var(--color-border-critical);
+            background: var(--critical-subdued);
+        }
+
+        .audit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+
+        .audit-header h3 {
+            margin: 0;
+        }
+
+        .score-badge {
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-medium);
+        }
+
+        .score-badge.high {
+            background: var(--color-background-success-default);
+            color: var(--color-text-inverse);
+        }
+
+        .score-badge.medium {
+            background: var(--color-background-warning-default);
+            color: var(--color-text-inverse);
+        }
+
+        .score-badge.low {
+            background: var(--color-background-critical-default);
+            color: var(--color-text-inverse);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-6);
+            margin: var(--space-8) 0;
+        }
+
+        .stat-card {
+            background: var(--color-background-surface);
+            border-radius: var(--radius-large);
+            padding: var(--space-6);
+            text-align: center;
+            box-shadow: var(--elevation-low);
+            border: 1px solid var(--color-border-subdued);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-text-brand);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--color-text-subdued);
+            font-size: 0.95rem;
+            margin-top: var(--space-2);
+        }
+
+        /* Search */
+        .search-box {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            border: 2px solid var(--color-border-base);
+            border-radius: var(--radius-medium);
+            font-size: 1rem;
+            margin-bottom: var(--space-6);
+            font-family: inherit;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--color-border-brand);
+            box-shadow: 0 0 0 3px var(--brand-primary-light);
+        }
+
+        /* Alert */
+        .alert {
+            padding: var(--space-4) var(--space-6);
+            border-radius: var(--radius-medium);
+            margin: var(--space-4) 0;
+            border-left: 4px solid;
+        }
+
+        .alert.info {
+            background: var(--color-background-brand-subdued);
+            border-color: var(--color-border-brand);
+            color: var(--color-text-brand);
+        }
+
+        .alert.success {
+            background: var(--color-background-success-subdued);
+            border-color: var(--color-border-success);
+            color: var(--color-text-success);
+        }
+
+        .alert.warning {
+            background: var(--color-background-warning-subdued);
+            border-color: var(--color-border-warning);
+            color: var(--color-text-warning);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs button {
+                padding: var(--space-3) var(--space-4);
+                font-size: 0.85rem;
+            }
+
+            .card {
+                padding: var(--space-6);
+            }
+        }
+
+        /* Progress Bar */
+        .progress {
+            width: 100%;
+            height: 12px;
+            background: var(--neutral-20);
+            border-radius: 999px;
+            overflow: hidden;
+            margin: var(--space-4) 0;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-accent) 100%);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 999px;
+            box-shadow: 0 0 12px rgba(0, 102, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span>Superhuman</span> Voice & Tone Audit Tool
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul class="nav-tabs">
+                <li><button class="active" data-tab="quick-ref">Quick Reference</button></li>
+                <li><button data-tab="methodology">Full Methodology</button></li>
+                <li><button data-tab="copy-tool">Copy Scorer</button></li>
+                <li><button data-tab="figma-audit">Figma Audit</button></li>
+                <li><button data-tab="content-library">Content Library</button></li>
+                <li><button data-tab="examples">Examples</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Quick Reference Tab -->
+        <div id="quick-ref" class="tab-content active">
+            <div class="card">
+                <h2>✅ Self-Audit Checklist</h2>
+                <p>Use this checklist before finalizing any UI copy</p>
+
+                <h3>1. Crisp (Clarity-Focused)</h3>
+                <ul class="checklist">
+                    <li><input type="checkbox"> Would I say this out loud to a friend?</li>
+                    <li><input type="checkbox"> Is this the shortest way to say it?</li>
+                    <li><input type="checkbox"> No corporate jargon?</li>
+                    <li><input type="checkbox"> Active voice?</li>
+                </ul>
+
+                <h3>2. Uplifting (Warm & Empowering)</h3>
+                <ul class="checklist">
+                    <li><input type="checkbox"> Does this make someone feel more capable?</li>
+                    <li><input type="checkbox"> Emphasizes human agency?</li>
+                    <li><input type="checkbox"> Positive framing?</li>
+                    <li><input type="checkbox"> Speaks to people, not "users"?</li>
+                </ul>
+
+                <h3>3. Grounded (Confident Without Hype)</h3>
+                <ul class="checklist">
+                    <li><input type="checkbox"> Enthusiasm feels earned, not inflated?</li>
+                    <li><input type="checkbox"> No vague superlatives?</li>
+                    <li><input type="checkbox"> Specific and tangible?</li>
+                    <li><input type="checkbox"> Can I back up this claim?</li>
+                </ul>
+
+                <h3>4. Strategically Witty (When Appropriate)</h3>
+                <ul class="checklist">
+                    <li><input type="checkbox"> Does wit serve clarity (or compete with it)?</li>
+                    <li><input type="checkbox"> Is it evergreen?</li>
+                    <li><input type="checkbox"> Work-appropriate?</li>
+                    <li><input type="checkbox"> If no wit, is that okay?</li>
+                </ul>
+
+                <h3>5. Tone Match</h3>
+                <ul class="checklist">
+                    <li><input type="checkbox"> In-product → Crisp + Uplifting?</li>
+                    <li><input type="checkbox"> Marketing → Grounded + Witty + Uplifting?</li>
+                    <li><input type="checkbox"> Sales → Crisp + Grounded + Uplifting?</li>
+                </ul>
+
+                <h3>6. Style Compliance</h3>
+                <ul class="checklist">
+                    <li><input type="checkbox"> Sentence case for UI copy?</li>
+                    <li><input type="checkbox"> No periods on buttons/CTAs?</li>
+                    <li><input type="checkbox"> Consistent terminology?</li>
+                    <li><input type="checkbox"> No exclamation marks unless celebrating?</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>🚫 Banned Words & Phrases</h2>
+
+                <h3>Corporate Jargon (Never Use)</h3>
+                <div class="banned-words">
+                    <div class="banned-word">❌ Leverage</div>
+                    <div class="banned-word">❌ Optimize</div>
+                    <div class="banned-word">❌ Utilize</div>
+                    <div class="banned-word">❌ Supercharge</div>
+                    <div class="banned-word">❌ Unlock</div>
+                    <div class="banned-word">❌ Revolutionize</div>
+                    <div class="banned-word">❌ Transform</div>
+                    <div class="banned-word">❌ Drive</div>
+                    <div class="banned-word">❌ Enhance</div>
+                    <div class="banned-word">❌ Empower</div>
+                    <div class="banned-word">❌ Seamlessly</div>
+                    <div class="banned-word">❌ Robust</div>
+                    <div class="banned-word">❌ Game-changing</div>
+                    <div class="banned-word">❌ Best-in-class</div>
+                    <div class="banned-word">❌ World-class</div>
+                    <div class="banned-word">❌ Cutting-edge</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📐 Copy Length Guidelines</h2>
+                <table>
+                    <tr>
+                        <th>Element</th>
+                        <th>Target</th>
+                        <th>Max</th>
+                        <th>Examples</th>
+                    </tr>
+                    <tr>
+                        <td>Buttons/CTAs</td>
+                        <td>1-3 words</td>
+                        <td>20 characters</td>
+                        <td>"Sign up", "Get started", "Continue"</td>
+                    </tr>
+                    <tr>
+                        <td>Headlines</td>
+                        <td>5-10 words</td>
+                        <td>60 characters</td>
+                        <td>Should be skimmable</td>
+                    </tr>
+                    <tr>
+                        <td>Body</td>
+                        <td>10-20 words/sentence</td>
+                        <td>200 characters/paragraph</td>
+                        <td>Break up long blocks</td>
+                    </tr>
+                    <tr>
+                        <td>Microcopy</td>
+                        <td>2-5 words</td>
+                        <td>40 characters</td>
+                        <td>Must be instantly scannable</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Methodology Tab -->
+        <div id="methodology" class="tab-content">
+            <div class="card">
+                <h2>UI Copy Audit Methodology</h2>
+                <p>Systematic framework to evaluate existing UI copy against Superhuman voice & tone strategy</p>
+
+                <h3>Part 1: Copy Extraction Method</h3>
+                <h4>Step 1: Identify copy-bearing layers</h4>
+                <ul>
+                    <li>TEXT nodes (labels, body copy, headings)</li>
+                    <li>COMPONENT instances with text properties</li>
+                    <li>Button labels, form fields, tooltips</li>
+                    <li>Empty states, error messages, success messages</li>
+                    <li>Onboarding flows, modal dialogs</li>
+                </ul>
+
+                <h4>Step 2: Categorize by UI pattern</h4>
+                <div class="copy-block">
+                    Categories:
+                    - CTAs (Call-to-Action buttons)
+                    - Headlines/Subheads
+                    - Body copy
+                    - Microcopy (labels, hints, tooltips)
+                    - Error messages
+                    - Success messages
+                    - Empty states
+                    - Onboarding/Welcome flows
+                </div>
+
+                <h4>Step 3: Capture metadata</h4>
+                <p>For each string, record:</p>
+                <ul>
+                    <li>String ID</li>
+                    <li>Figma node ID and URL</li>
+                    <li>Coda doc reference</li>
+                    <li>Category and surface area</li>
+                    <li>User context</li>
+                    <li>Current copy text</li>
+                    <li>Character count</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>Part 2: Voice & Tone Evaluation Framework</h2>
+                <p><strong>Scoring scale:</strong> 1-3 for each dimension</p>
+
+                <div class="comparison">
+                    <div class="comparison-item good">
+                        <h4>✅ Strong Match (3)</h4>
+                        <p>Exemplifies the attribute</p>
+                    </div>
+                    <div class="comparison-item" style="background: var(--warning-subdued); border-color: var(--warning-border);">
+                        <h4>⚠️ Partial Match (2)</h4>
+                        <p>Present but could be stronger</p>
+                    </div>
+                </div>
+                <div class="comparison">
+                    <div class="comparison-item bad">
+                        <h4>❌ Misaligned (1)</h4>
+                        <p>Does not reflect attribute</p>
+                    </div>
+                    <div class="comparison-item" style="background: var(--neutral-10); border-color: var(--neutral-30);">
+                        <h4>N/A</h4>
+                        <p>Not applicable to this copy type</p>
+                    </div>
+                </div>
+
+                <h3>Voice Dimensions</h3>
+                <table>
+                    <tr>
+                        <th>Dimension</th>
+                        <th>Evaluates</th>
+                        <th>Red Flags</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Crisp</strong></td>
+                        <td>Jargon-free, concise, conversational</td>
+                        <td>Corporate hedging, passive voice, qualifiers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Uplifting</strong></td>
+                        <td>Human-focused, positive, empowering</td>
+                        <td>Negativity, condescension, overpersonification</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Grounded</strong></td>
+                        <td>Confident without hype, specific claims</td>
+                        <td>Superlatives, hype words, vague promises</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Strategically Witty</strong></td>
+                        <td>Clever with purpose, clarity-first</td>
+                        <td>Forced humor, cultural idioms, obscuring meaning</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card">
+                <h2>Part 3: Prioritization Framework</h2>
+                <p><strong>Formula:</strong> Priority Score = Visibility × Misalignment × Volume</p>
+
+                <table>
+                    <tr>
+                        <th>Priority</th>
+                        <th>Criteria</th>
+                        <th>Examples</th>
+                    </tr>
+                    <tr>
+                        <td><span class="badge danger">P0 - Critical</span></td>
+                        <td>High visibility + Misaligned + High volume</td>
+                        <td>Homepage hero, primary CTAs, onboarding</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge warning">P1 - High</span></td>
+                        <td>High visibility + Partially aligned</td>
+                        <td>Landing pages, upgrade prompts</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge info">P2 - Medium</span></td>
+                        <td>Lower visibility + Misaligned</td>
+                        <td>Settings descriptions, tooltips</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge" style="background: var(--neutral-30);">P3 - Low</span></td>
+                        <td>Lower visibility + Mostly aligned</td>
+                        <td>Edge cases, admin surfaces</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Copy Scorer Tool Tab -->
+        <div id="copy-tool" class="tab-content">
+            <div class="card">
+                <h2>Interactive Copy Scorer</h2>
+                <p>Enter your UI copy and score it across voice dimensions</p>
+
+                <textarea class="search-box" id="copy-input" rows="4" placeholder="Enter your UI copy here..."></textarea>
+
+                <div style="margin-top: var(--space-4); display: flex; gap: var(--space-3);">
+                    <button class="btn" onclick="calculateScore()">Calculate Score</button>
+                    <button class="btn btn-secondary" onclick="resetScorer()">Reset</button>
+                </div>
+
+                <!-- Copy Status - Moved to top for visibility -->
+                <div class="card" id="status-card" style="text-align: center; border: 2px solid var(--color-border-subdued); padding: var(--space-8); margin-top: var(--space-6); transition: all 0.3s ease;">
+                    <h2 style="margin: 0; font-size: 1.25rem; color: var(--color-text-subdued); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Copy Status</h2>
+
+                    <!-- Status Badge -->
+                    <div id="status-badge" style="display: inline-block; margin: var(--space-6) 0; padding: var(--space-5) var(--space-8); border-radius: var(--radius-xlarge); font-size: 1.5rem; font-weight: 700; letter-spacing: 0.5px;">
+                        ENTER COPY TO EVALUATE
+                    </div>
+
+                    <p id="status-message" style="margin-top: var(--space-4); font-size: 1.1rem; color: var(--color-text-subdued); font-weight: 500;"></p>
+
+                    <!-- Issue Summary -->
+                    <div id="issue-summary" style="margin-top: var(--space-6); padding: var(--space-4); background: var(--neutral-5); border-radius: var(--radius-medium); text-align: left; display: none;">
+                        <h4 style="margin: 0 0 var(--space-3) 0; font-size: 0.9rem; font-weight: 600; color: var(--color-text-subdued); text-transform: uppercase; letter-spacing: 0.5px;">Issues Found</h4>
+                        <div id="issue-list" style="display: flex; flex-direction: column; gap: var(--space-2);"></div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-6);">1️⃣ Who is this for?</h3>
+                <div class="score-input" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="score-item">
+                        <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                            <input type="radio" name="persona" value="students" checked>
+                            <div>
+                                <strong>Students</strong>
+                                <div style="font-size: 0.85rem; font-weight: 400; margin-top: var(--space-1);">60% Crisp, 40% Uplifting</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="score-item">
+                        <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                            <input type="radio" name="persona" value="knowledge-workers">
+                            <div>
+                                <strong>Knowledge Workers</strong>
+                                <div style="font-size: 0.85rem; font-weight: 400; margin-top: var(--space-1);">60% Uplifting, 40% Crisp</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="score-item">
+                        <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                            <input type="radio" name="persona" value="general">
+                            <div>
+                                <strong>General</strong>
+                                <div style="font-size: 0.85rem; font-weight: 400; margin-top: var(--space-1);">Even split: Crisp, Uplifting, Witty</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: var(--space-6);">2️⃣ What type of content?</h3>
+                <div class="score-input" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="score-item">
+                        <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                            <input type="radio" name="content-type" value="error" checked>
+                            <div>
+                                <strong>Error Message</strong>
+                                <div style="font-size: 0.85rem; font-weight: 400; margin-top: var(--space-1);">Crisp only, no wit</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="score-item">
+                        <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                            <input type="radio" name="content-type" value="success">
+                            <div>
+                                <strong>Success State</strong>
+                                <div style="font-size: 0.85rem; font-weight: 400; margin-top: var(--space-1);">Uplifting + Crisp + Witty</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="score-item">
+                        <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                            <input type="radio" name="content-type" value="empty">
+                            <div>
+                                <strong>Empty State</strong>
+                                <div style="font-size: 0.85rem; font-weight: 400; margin-top: var(--space-1);">Uplifting + Informative</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="score-item">
+                        <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                            <input type="radio" name="content-type" value="body">
+                            <div>
+                                <strong>Body Copy</strong>
+                                <div style="font-size: 0.85rem; font-weight: 400; margin-top: var(--space-1);">80% Crisp, 20% Uplifting</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="score-item">
+                        <label style="display: flex; align-items: center; gap: var(--space-2); cursor: pointer;">
+                            <input type="radio" name="content-type" value="chat">
+                            <div>
+                                <strong>Chat/LLM Response</strong>
+                                <div style="font-size: 0.85rem; font-weight: 400; margin-top: var(--space-1);">Conversational, first-person</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="validation-results" style="display: none; margin-top: var(--space-6);"></div>
+
+                <!-- Compact Manual Scoring -->
+                <div style="margin-top: var(--space-6); padding: var(--space-5); background: var(--neutral-5); border-radius: var(--radius-large); border: 1px solid var(--color-border-subdued);">
+                    <h3 style="margin: 0 0 var(--space-4) 0; font-size: 1rem; font-weight: 600; color: var(--color-text-default);">Manual Scoring</h3>
+
+                    <div style="display: grid; gap: var(--space-4);">
+                        <!-- Row 1 -->
+                        <div style="display: flex; align-items: center; gap: var(--space-4);">
+                            <label style="min-width: 140px; font-size: 0.875rem; font-weight: 500; color: var(--color-text-subdued);">Crisp</label>
+                            <input type="range" min="1" max="3" value="2" id="crisp-score" style="flex: 1;">
+                            <div style="min-width: 50px; text-align: right; font-weight: 600; color: var(--color-text-brand);"><span id="crisp-value">2</span> / 3</div>
+                        </div>
+
+                        <!-- Row 2 -->
+                        <div style="display: flex; align-items: center; gap: var(--space-4);">
+                            <label style="min-width: 140px; font-size: 0.875rem; font-weight: 500; color: var(--color-text-subdued);">Uplifting</label>
+                            <input type="range" min="1" max="3" value="2" id="uplifting-score" style="flex: 1;">
+                            <div style="min-width: 50px; text-align: right; font-weight: 600; color: var(--color-text-brand);"><span id="uplifting-value">2</span> / 3</div>
+                        </div>
+
+                        <!-- Row 3 -->
+                        <div style="display: flex; align-items: center; gap: var(--space-4);">
+                            <label style="min-width: 140px; font-size: 0.875rem; font-weight: 500; color: var(--color-text-subdued);">Grounded</label>
+                            <input type="range" min="1" max="3" value="2" id="grounded-score" style="flex: 1;">
+                            <div style="min-width: 50px; text-align: right; font-weight: 600; color: var(--color-text-brand);"><span id="grounded-value">2</span> / 3</div>
+                        </div>
+
+                        <!-- Row 4 -->
+                        <div style="display: flex; align-items: center; gap: var(--space-4);">
+                            <label style="min-width: 140px; font-size: 0.875rem; font-weight: 500; color: var(--color-text-subdued);">Witty</label>
+                            <input type="range" min="0" max="3" value="0" id="witty-score" style="flex: 1;">
+                            <div style="min-width: 50px; text-align: right; font-weight: 600; color: var(--color-text-brand);"><span id="witty-value">N/A</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="jargon-check" class="alert warning" style="display: none;">
+                    <strong>⚠️ Banned Words Detected:</strong> <span id="jargon-list"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Figma Audit Tab -->
+        <div id="figma-audit" class="tab-content">
+            <div class="card">
+                <h2>🎨 Figma Copy Audit</h2>
+                <p>Extract and audit all copy from a Figma frame or page. Instantly identify language that needs revision.</p>
+
+                <div class="alert info">
+                    <strong>How to use:</strong> Paste a Figma URL below. The tool will extract all text, run validation checks, and show you which copy needs attention.
+                </div>
+
+                <h3 style="margin-top: var(--space-6);">Figma URL</h3>
+                <input type="text" class="search-box" id="figma-url" placeholder="https://figma.com/design/...?node-id=123-456" style="margin-bottom: var(--space-4);">
+
+                <h3>Default Context (applies to all extracted copy)</h3>
+                <div class="score-input" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="score-item">
+                        <label style="font-weight: 600; margin-bottom: var(--space-2);">Target Audience</label>
+                        <select id="figma-persona" style="width: 100%; padding: var(--space-2); border: 2px solid var(--color-border-base); border-radius: var(--radius-medium); font-family: inherit;">
+                            <option value="students">Students (60% Crisp, 40% Uplifting)</option>
+                            <option value="knowledge-workers" selected>Knowledge Workers (60% Uplifting, 40% Crisp)</option>
+                            <option value="general">General (Even split)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: var(--space-3); margin-top: var(--space-6);">
+                    <button class="btn" onclick="auditFigmaFrame()">
+                        Audit Figma Copy
+                    </button>
+                    <button class="btn btn-secondary" onclick="runDemoAudit()">
+                        Try Demo Mode
+                    </button>
+                </div>
+
+                <div id="figma-loading" style="display: none; margin-top: var(--space-6);">
+                    <div class="alert info">
+                        <strong>⏳ Extracting copy from Figma...</strong> This may take a moment.
+                    </div>
+                </div>
+
+                <div id="figma-results" style="display: none; margin-top: var(--space-6);"></div>
+            </div>
+        </div>
+
+        <!-- Content Library Tab -->
+        <div id="content-library" class="tab-content">
+            <div class="card">
+                <h2>📚 Reusable Content Library</h2>
+                <p>Pre-approved copy snippets from the Superhuman language guidance. Copy and adapt these examples for your UI.</p>
+
+                <div class="alert info">
+                    <strong>How to use:</strong> These examples follow our voice & tone guidelines. Use them as templates or inspiration for consistent messaging across the product.
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Error Messages</h2>
+                <p><strong>Format:</strong> [Error nature] + [How to resolve]</p>
+                <p><strong>Tone:</strong> Crisp and clear only, no wit</p>
+
+                <h3>Examples</h3>
+                <div class="copy-block">
+                    <strong>Generic Error</strong><br>
+                    "Data not found. Try something else."
+                </div>
+
+                <div class="copy-block">
+                    <strong>Content Limit</strong><br>
+                    "Too much text to review. Proofreader can help with text up to 10,000 words."
+                </div>
+
+                <div class="copy-block">
+                    <strong>Agent-Specific</strong><br>
+                    "[Agent name] encountered an issue. [Specific next step]."
+                </div>
+
+                <div class="copy-block">
+                    <strong>Save Failed</strong><br>
+                    "Couldn't save your changes. Try again?"
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Success States</h2>
+                <p><strong>Format:</strong> [Encouraging statement] + [What was achieved]</p>
+                <p><strong>Tone:</strong> Varies by persona</p>
+
+                <h3>For Students (60% Crisp, 40% Uplifting)</h3>
+                <div class="copy-block success">
+                    "Nicely written."
+                </div>
+                <div class="copy-block success">
+                    "Well crafted."
+                </div>
+                <div class="copy-block success">
+                    "You're all clear."
+                </div>
+                <div class="copy-block success">
+                    "Nicely done! You have no Proofreader suggestions, but you can try another agent for more customized feedback."
+                </div>
+
+                <h3>For Knowledge Workers (60% Uplifting, 40% Crisp)</h3>
+                <div class="copy-block success">
+                    "Your writing is looking polished and tidy."
+                </div>
+                <div class="copy-block success">
+                    "Well done! Your writing is on point."
+                </div>
+                <div class="copy-block success">
+                    "Spot on! Your writing really hit the mark."
+                </div>
+                <div class="copy-block success">
+                    "That's a well-worded piece of prose!"
+                </div>
+
+                <h3>For General/Playful Agents (Even Split)</h3>
+                <div class="copy-block success">
+                    "Looking good! Keep up the great work."
+                </div>
+                <div class="copy-block success">
+                    "Nice! You're ready to go."
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Empty States</h2>
+                <p><strong>Format:</strong> [Uplifting readiness] + [What's needed to start]</p>
+                <p><strong>Tone:</strong> Uplifting and informative, avoid negative framing</p>
+
+                <h3>Examples</h3>
+                <div class="copy-block">
+                    <strong>Playful with Product Name</strong><br>
+                    "Ready to Go whenever you are! Add text to get started."
+                </div>
+
+                <div class="copy-block">
+                    <strong>Direct and Clear</strong><br>
+                    "Write at least 50 words to get started."
+                </div>
+
+                <div class="copy-block">
+                    <strong>Agent-Specific</strong><br>
+                    "[Agent] is ready to help once you have [X words/content]."
+                </div>
+
+                <div class="copy-block">
+                    <strong>Encouraging</strong><br>
+                    "Start writing and I'll help you along the way."
+                </div>
+
+                <h3>❌ Avoid These Patterns</h3>
+                <div class="copy-block danger">
+                    "You haven't written enough." → Negative framing
+                </div>
+                <div class="copy-block danger">
+                    "Not enough content to analyze." → Blaming tone
+                </div>
+                <div class="copy-block danger">
+                    "Nothing to see here yet!" → Dismissive
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Body Copy (Primary Agent Copy)</h2>
+                <p><strong>Format:</strong> [Action taken] + [Next steps/recommendations]</p>
+                <p><strong>Tone:</strong> 80% Crisp, 20% Uplifting</p>
+
+                <h3>Examples</h3>
+                <div class="copy-block">
+                    <strong>With First-Person</strong><br>
+                    "I found 11 claims without citations in your text."
+                </div>
+
+                <div class="copy-block">
+                    <strong>Analysis Result</strong><br>
+                    "I flagged phrases that often appear in AI writing."
+                </div>
+
+                <div class="copy-block">
+                    <strong>With Recommendation</strong><br>
+                    "I reviewed your text for clarity. Consider breaking up long sentences for better readability."
+                </div>
+
+                <div class="copy-block">
+                    <strong>With Hedging</strong><br>
+                    "I detected [N] potential issues. Review each to see if changes are needed."
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Chat/LLM Responses</h2>
+                <p><strong>Tone:</strong> Conversational, always use first-person ("I")</p>
+                <p><strong>Emphasis:</strong> Assisting and empowering, not replacing the user</p>
+
+                <h3>Examples</h3>
+                <div class="copy-block">
+                    <strong>Greeting</strong><br>
+                    "Hi, Jane. I'm here to help you craft your best writing."
+                </div>
+
+                <div class="copy-block">
+                    <strong>Explaining Capability</strong><br>
+                    "I'm an AI, so I don't have likes or dislikes. However, I can help you analyze Shakespeare's writing style."
+                </div>
+
+                <div class="copy-block">
+                    <strong>In Progress</strong><br>
+                    "Reviewing options to improve your text."
+                </div>
+
+                <div class="copy-block">
+                    <strong>Clarification</strong><br>
+                    "I can help with that. Could you provide more details about [specific aspect]?"
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Real Examples from Product</h2>
+                <p>These examples are drawn from actual Superhuman Go implementations:</p>
+
+                <h3>Onboarding</h3>
+                <div class="comparison">
+                    <div class="comparison-item good">
+                        <h4>Example</h4>
+                        <p>"Go, quick. Select any text to get help right where you're working."</p>
+                        <small><strong>Why it works:</strong> Playful use of product name "Go", clear instructions, encouraging tone</small>
+                    </div>
+                </div>
+
+                <h3>Success State</h3>
+                <div class="comparison">
+                    <div class="comparison-item good">
+                        <h4>Example</h4>
+                        <p>"Nicely done! You have no Proofreader suggestions, but you can try another agent for more customized feedback."</p>
+                        <small><strong>Why it works:</strong> Supportive, conversational, offers next step</small>
+                    </div>
+                </div>
+
+                <h3>Error State</h3>
+                <div class="comparison">
+                    <div class="comparison-item good">
+                        <h4>Example</h4>
+                        <p>"Too much text to review. Proofreader can help with text up to 10,000 words."</p>
+                        <small><strong>Why it works:</strong> Explains error clearly, provides specific limit, no blame</small>
+                    </div>
+                </div>
+
+                <h3>In Progress</h3>
+                <div class="comparison">
+                    <div class="comparison-item good">
+                        <h4>Example</h4>
+                        <p>"Reviewing options to improve your text."</p>
+                        <small><strong>Why it works:</strong> Informative, uplifting, not over-personified</small>
+                    </div>
+                </div>
+
+                <h3>Empty State</h3>
+                <div class="comparison">
+                    <div class="comparison-item good">
+                        <h4>Example</h4>
+                        <p>"Ready to Go whenever you are! Add text to get started."</p>
+                        <small><strong>Why it works:</strong> Playful product name use, positive framing, clear next step</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Examples Tab -->
+        <div id="examples" class="tab-content">
+            <div class="card">
+                <h2>Do vs Don't Examples</h2>
+
+                <h3>Onboarding Headlines</h3>
+                <div class="comparison">
+                    <div class="comparison-item bad">
+                        <h4>❌ Don't</h4>
+                        <p>"Welcome to the future of productivity!"</p>
+                        <small>Issues: Vague hype, cliché</small>
+                    </div>
+                    <div class="comparison-item good">
+                        <h4>✅ Do</h4>
+                        <p>"Welcome! Let's get started."</p>
+                        <small>Grounded, direct, action-oriented</small>
+                    </div>
+                </div>
+
+                <h3>Value Props</h3>
+                <div class="comparison">
+                    <div class="comparison-item bad">
+                        <h4>❌ Don't</h4>
+                        <p>"We give you a canvas to create anything."</p>
+                        <small>Issues: Vague metaphor, not specific</small>
+                    </div>
+                    <div class="comparison-item good">
+                        <h4>✅ Do</h4>
+                        <p>"Create docs that work like apps."</p>
+                        <small>Specific, differentiating, clear</small>
+                    </div>
+                </div>
+
+                <h3>CTAs</h3>
+                <div class="comparison">
+                    <div class="comparison-item bad">
+                        <h4>❌ Don't</h4>
+                        <p>"Get Started Now!"</p>
+                        <small>Issues: Exclamation, title case</small>
+                    </div>
+                    <div class="comparison-item good">
+                        <h4>✅ Do</h4>
+                        <p>"Get started"</p>
+                        <small>Sentence case, no punctuation</small>
+                    </div>
+                </div>
+
+                <h3>Error Messages</h3>
+                <div class="comparison">
+                    <div class="comparison-item bad">
+                        <h4>❌ Don't</h4>
+                        <p>"Oops! Something went wrong."</p>
+                        <small>Issues: Vague, no actionable info</small>
+                    </div>
+                    <div class="comparison-item good">
+                        <h4>✅ Do</h4>
+                        <p>"We couldn't save your changes. [Retry button]"</p>
+                        <small>Specific, actionable</small>
+                    </div>
+                </div>
+
+                <h3>Empty States</h3>
+                <div class="comparison">
+                    <div class="comparison-item bad">
+                        <h4>❌ Don't</h4>
+                        <p>"Nothing to see here yet!"</p>
+                        <small>Issues: Dismissive tone</small>
+                    </div>
+                    <div class="comparison-item good">
+                        <h4>✅ Do</h4>
+                        <p>"No messages yet. Start a conversation?"</p>
+                        <small>Encouraging, action-oriented</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Replacement Guide</h2>
+
+                <h3>Corporate Jargon → Plain Language</h3>
+                <table>
+                    <tr>
+                        <th>❌ Don't Say</th>
+                        <th>✅ Say Instead</th>
+                    </tr>
+                    <tr>
+                        <td>Leverage our platform</td>
+                        <td>Use our platform</td>
+                    </tr>
+                    <tr>
+                        <td>Optimize your workflow</td>
+                        <td>Speed up your work</td>
+                    </tr>
+                    <tr>
+                        <td>Supercharge productivity</td>
+                        <td>Get more done</td>
+                    </tr>
+                    <tr>
+                        <td>Unlock potential</td>
+                        <td>Do more</td>
+                    </tr>
+                    <tr>
+                        <td>Seamlessly integrate</td>
+                        <td>Works with</td>
+                    </tr>
+                </table>
+
+                <h3>Negative → Positive Framing</h3>
+                <table>
+                    <tr>
+                        <th>❌ Negative</th>
+                        <th>✅ Positive</th>
+                    </tr>
+                    <tr>
+                        <td>Stop wasting time on email</td>
+                        <td>Spend less time on email</td>
+                    </tr>
+                    <tr>
+                        <td>Don't struggle with tasks</td>
+                        <td>Handle tasks easily</td>
+                    </tr>
+                    <tr>
+                        <td>Tired of [pain]?</td>
+                        <td>Ready for [benefit]?</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tab Navigation
+        const tabButtons = document.querySelectorAll('.nav-tabs button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        console.log('Tab buttons found:', tabButtons.length);
+        console.log('Tab contents found:', tabContents.length);
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.dataset.tab;
+                console.log('Tab clicked:', targetTab);
+
+                // Remove active class from all buttons and tabs
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button and corresponding tab
+                button.classList.add('active');
+                const targetElement = document.getElementById(targetTab);
+                console.log('Target element found:', targetElement);
+                if (targetElement) {
+                    targetElement.classList.add('active');
+                }
+            });
+        });
+
+        // Score Calculator
+        const crispSlider = document.getElementById('crisp-score');
+        const upliftingSlider = document.getElementById('uplifting-score');
+        const groundedSlider = document.getElementById('grounded-score');
+        const wittySlider = document.getElementById('witty-score');
+
+        const crispValue = document.getElementById('crisp-value');
+        const upliftingValue = document.getElementById('uplifting-value');
+        const groundedValue = document.getElementById('grounded-value');
+        const wittyValue = document.getElementById('witty-value');
+
+        crispSlider.addEventListener('input', () => {
+            crispValue.textContent = crispSlider.value;
+        });
+
+        upliftingSlider.addEventListener('input', () => {
+            upliftingValue.textContent = upliftingSlider.value;
+        });
+
+        groundedSlider.addEventListener('input', () => {
+            groundedValue.textContent = groundedSlider.value;
+        });
+
+        wittySlider.addEventListener('input', () => {
+            wittyValue.textContent = wittySlider.value == 0 ? 'N/A' : wittySlider.value;
+        });
+
+        function calculateScore() {
+            const copyInput = document.getElementById('copy-input').value.trim();
+            const persona = document.querySelector('input[name="persona"]:checked').value;
+            const contentType = document.querySelector('input[name="content-type"]:checked').value;
+
+            if (!copyInput) {
+                document.getElementById('validation-results').style.display = 'none';
+                return;
+            }
+
+            // Validation checks
+            const validationIssues = [];
+            const validationPasses = [];
+
+            // 1. Banned Words & Patterns
+            const bannedWords = ['leverage', 'optimize', 'utilize', 'supercharge', 'unlock', 'revolutionize',
+                                'transform', 'drive', 'enhance', 'empower', 'seamlessly', 'robust',
+                                'game-changing', 'best-in-class', 'world-class', 'cutting-edge'];
+
+            const bannedPatterns = [
+                { name: 'Idioms', examples: [
+                    'thinking outside the box', 'low-hanging fruit', 'move the needle',
+                    'kicking butt and taking names', 'hit the ground running', 'circle back',
+                    'touch base', 'take it to the next level', 'at the end of the day',
+                    'it is what it is', 'game changer', 'paradigm shift', 'synergy',
+                    'win-win', 'best of both worlds', 'piece of cake', 'break the ice',
+                    'bite the bullet', 'cut corners', 'go the extra mile', 'get the ball rolling',
+                    'back to the drawing board', 'on the same page', 'bring to the table',
+                    'push the envelope', 'raise the bar', 'shift gears'
+                ]},
+                { name: 'Writing puns', examples: ['pen-ultimate', 'comma-nd'] },
+                { name: 'Figurative language', examples: ['navigate the landscape', 'dive deep'] },
+                { name: 'Overly polished', examples: ['furthermore', 'subsequently', 'accordingly'] },
+                { name: 'Trendy/colloquial', examples: ['yolo', 'slay', 'vibes', 'yas', 'lit', 'fire'] },
+                { name: 'Informal/Casual', examples: ['you go, girl', 'you go, boy', 'you got this', 'way to go', 'good job', 'nice job', 'keep it up', 'you rock', 'awesome sauce', 'right on', 'cool beans', 'nailed it', 'killing it', 'crushing it'] },
+                { name: 'Aggressive/Competitive', examples: [
+                    'dominate', 'crush it', 'crush the competition', 'kick butt',
+                    'take no prisoners', 'go hard', 'kill it', 'destroy',
+                    'annihilate', 'blow away the competition', 'leave them in the dust',
+                    'beat the competition', 'win at all costs', 'take over', 'conquer',
+                    'demolish', 'obliterate', 'smoke the competition'
+                ]},
+                { name: 'Overpromising/Finality', examples: [
+                    'done', 'complete', 'finished', 'all set', 'all done',
+                    'solid', 'perfect', 'flawless', 'excellent',
+                    'ready to go', 'ready to send', 'ready to ship', 'good to go',
+                    "you're all done", "you're good to go", "you're all set",
+                    'this is great', 'this works perfectly', 'this is perfect',
+                    'nailed it', 'spot on', 'exactly right', 'looks perfect',
+                    'completely finished', 'totally done', 'all good'
+                ]},
+                { name: 'Over-personification', examples: ['AI thinks', 'AI feels', 'AI knows', 'AI believes'] }
+            ];
+
+            const lowerCopy = copyInput.toLowerCase();
+
+            // Check banned words
+            let detectedJargon = [];
+            bannedWords.forEach(word => {
+                if (lowerCopy.includes(word)) {
+                    detectedJargon.push(word);
+                }
+            });
+
+            if (detectedJargon.length > 0) {
+                validationIssues.push({
+                    type: 'error',
+                    title: 'Banned Words Detected',
+                    message: detectedJargon.map(w => `"${w}"`).join(', '),
+                    suggestion: 'Use plain language alternatives'
+                });
+                document.getElementById('jargon-check').style.display = 'block';
+                document.getElementById('jargon-list').textContent = detectedJargon.map(w => `"${w}"`).join(', ');
+            } else {
+                document.getElementById('jargon-check').style.display = 'none';
+            }
+
+            // Check banned patterns
+            bannedPatterns.forEach(pattern => {
+                const found = pattern.examples.filter(ex => lowerCopy.includes(ex.toLowerCase()));
+                if (found.length > 0) {
+                    validationIssues.push({
+                        type: 'warning',
+                        title: `Avoid ${pattern.name}`,
+                        message: found.join(', '),
+                        suggestion: 'Use clear, direct language'
+                    });
+                }
+            });
+
+            // 2. Pronoun Usage Check
+            const hasFirstPerson = /\b(I|I'm|I've|my)\b/i.test(copyInput);
+            const hasWe = /\b(we|we're|we've|our)\b/i.test(copyInput);
+
+            if (contentType === 'chat') {
+                if (hasWe) {
+                    validationIssues.push({
+                        type: 'warning',
+                        title: 'Pronoun Check',
+                        message: 'Use "I" instead of "we" for chat responses',
+                        suggestion: 'Example: "I found 11 issues" not "We found 11 issues"'
+                    });
+                } else if (hasFirstPerson) {
+                    validationPasses.push({ title: 'Pronoun Usage', message: 'Correct first-person usage for chat' });
+                }
+            } else {
+                if (hasWe || hasFirstPerson) {
+                    validationIssues.push({
+                        type: 'info',
+                        title: 'Pronoun Check',
+                        message: 'Consider removing pronouns in standard UI copy',
+                        suggestion: 'Example: "Data not found" instead of "We couldn\'t find data"'
+                    });
+                } else {
+                    validationPasses.push({ title: 'Pronoun Usage', message: 'No unnecessary pronouns' });
+                }
+            }
+
+            // 3. Negative Framing Check (for empty states and errors)
+            const negativePatterns = ["you haven't", "you need to", "not enough", "insufficient", "too little", "missing", "can't", "nothing to"];
+            const foundNegative = negativePatterns.filter(p => lowerCopy.includes(p));
+
+            if ((contentType === 'empty' || contentType === 'error') && foundNegative.length > 0) {
+                validationIssues.push({
+                    type: 'warning',
+                    title: 'Negative Framing',
+                    message: `Found: ${foundNegative.join(', ')}`,
+                    suggestion: 'Reframe positively. Example: "Write at least X words to get started" not "You haven\'t written enough"'
+                });
+            }
+
+            // 4. Exclamation Mark Analysis
+            const exclamationCount = (copyInput.match(/!/g) || []).length;
+            if (exclamationCount > 0) {
+                let exclamationFeedback = '';
+                if (contentType === 'error') {
+                    validationIssues.push({
+                        type: 'error',
+                        title: 'Exclamation Marks',
+                        message: 'Never use exclamation marks in error messages',
+                        suggestion: 'Keep error messages calm and direct'
+                    });
+                } else if (persona === 'students' && exclamationCount > 1) {
+                    validationIssues.push({
+                        type: 'warning',
+                        title: 'Exclamation Marks',
+                        message: `${exclamationCount} found - save for big achievements in academic contexts`,
+                        suggestion: 'Use sparingly for students'
+                    });
+                } else if (exclamationCount > 2) {
+                    validationIssues.push({
+                        type: 'warning',
+                        title: 'Exclamation Marks',
+                        message: `${exclamationCount} found - avoid overuse`,
+                        suggestion: 'Use for emphasis, not every sentence'
+                    });
+                } else {
+                    validationPasses.push({ title: 'Exclamation Marks', message: `${exclamationCount} used appropriately` });
+                }
+            }
+
+            // 5. Format Validation
+            if (contentType === 'error') {
+                const hasErrorNature = copyInput.length > 10;
+                const hasResolution = /try|select|add|write|check/i.test(copyInput);
+                if (!hasResolution) {
+                    validationIssues.push({
+                        type: 'warning',
+                        title: 'Format Check',
+                        message: 'Error messages should offer a path forward',
+                        suggestion: 'Format: [Error nature] + [How to resolve]'
+                    });
+                } else {
+                    validationPasses.push({ title: 'Format', message: 'Includes resolution path' });
+                }
+            }
+
+            if (contentType === 'success') {
+                const hasEncouragement = /(nice|well|great|good|done|spot)/i.test(copyInput);
+                if (hasEncouragement) {
+                    validationPasses.push({ title: 'Format', message: 'Includes encouraging statement' });
+                } else {
+                    validationIssues.push({
+                        type: 'info',
+                        title: 'Format Check',
+                        message: 'Consider adding encouraging statement',
+                        suggestion: 'Example: "Nicely done!" or "Well crafted."'
+                    });
+                }
+            }
+
+            if (contentType === 'empty') {
+                const hasPositiveFrame = /(ready|when you|get started|add|write)/i.test(copyInput);
+                if (hasPositiveFrame) {
+                    validationPasses.push({ title: 'Format', message: 'Positive framing detected' });
+                }
+            }
+
+            if (contentType === 'body') {
+                const hasFirstPersonAction = /I (found|flagged|detected|reviewed)/i.test(copyInput);
+                if (hasFirstPersonAction) {
+                    validationPasses.push({ title: 'Format', message: 'States action taken clearly' });
+                }
+            }
+
+            // 6. Wit Check based on content type
+            const witty = parseInt(wittySlider.value);
+            if (contentType === 'error' && witty > 0) {
+                validationIssues.push({
+                    type: 'error',
+                    title: 'Wit in Error Message',
+                    message: 'Error messages should never use wit or humor',
+                    suggestion: 'Keep crisp and clear only'
+                });
+            }
+
+            // Display validation results
+            const resultsDiv = document.getElementById('validation-results');
+            resultsDiv.innerHTML = '<h3>📊 Validation Results</h3>';
+
+            // Show passes
+            if (validationPasses.length > 0) {
+                validationPasses.forEach(pass => {
+                    resultsDiv.innerHTML += `
+                        <div class="alert success" style="margin: var(--space-3) 0;">
+                            <strong>✅ ${pass.title}:</strong> ${pass.message}
+                        </div>
+                    `;
+                });
+            }
+
+            // Show issues
+            if (validationIssues.length > 0) {
+                validationIssues.forEach(issue => {
+                    const alertType = issue.type === 'error' ? 'warning' : issue.type;
+                    const icon = issue.type === 'error' ? '❌' : issue.type === 'warning' ? '⚠️' : 'ℹ️';
+                    resultsDiv.innerHTML += `
+                        <div class="alert ${alertType}" style="margin: var(--space-3) 0;">
+                            <strong>${icon} ${issue.title}:</strong> ${issue.message}<br>
+                            <small style="opacity: 0.8;">💡 ${issue.suggestion}</small>
+                        </div>
+                    `;
+                });
+            }
+
+            resultsDiv.style.display = 'block';
+
+            // Determine Copy Status based on validation issues
+            const hasErrors = validationIssues.some(issue => issue.type === 'error');
+            const hasWarnings = validationIssues.some(issue => issue.type === 'warning');
+
+            const statusBadge = document.getElementById('status-badge');
+            const statusMessage = document.getElementById('status-message');
+            const statusCard = document.getElementById('status-card');
+
+            let status = '';
+            let statusText = '';
+            let statusDescription = '';
+            let badgeColor = '';
+            let badgeBackground = '';
+            let cardBorder = '';
+
+            if (hasErrors) {
+                // RED - Needs Revision
+                status = '🔴 NEEDS REVISION';
+                statusText = 'Critical issues detected';
+                statusDescription = 'This copy contains blocking issues that must be fixed before use.';
+                badgeColor = 'var(--neutral-0)';
+                badgeBackground = 'var(--critical)';
+                cardBorder = 'var(--critical)';
+            } else if (hasWarnings) {
+                // YELLOW - Review Recommended
+                status = '🟡 REVIEW RECOMMENDED';
+                statusText = 'Review suggested';
+                statusDescription = 'Consider addressing these issues to improve copy quality.';
+                badgeColor = 'var(--neutral-100)';
+                badgeBackground = 'var(--warning)';
+                cardBorder = 'var(--warning)';
+            } else {
+                // GREEN - Ready to Use
+                status = '🟢 READY TO USE';
+                statusText = 'No issues detected';
+                statusDescription = 'This copy aligns with Superhuman voice & tone guidelines.';
+                badgeColor = 'var(--neutral-0)';
+                badgeBackground = 'var(--success)';
+                cardBorder = 'var(--success)';
+            }
+
+            // Update status display
+            statusBadge.textContent = status;
+            statusBadge.style.color = badgeColor;
+            statusBadge.style.background = badgeBackground;
+            statusMessage.textContent = statusDescription;
+            statusCard.style.borderColor = cardBorder;
+
+            // Generate issue summary from validation issues
+            const issueSummary = document.getElementById('issue-summary');
+            const issueList = document.getElementById('issue-list');
+
+            // Only show errors and warnings in the summary
+            const criticalIssues = validationIssues.filter(issue => issue.type === 'error' || issue.type === 'warning');
+
+            if (criticalIssues.length > 0) {
+                issueList.innerHTML = criticalIssues.map(issue => {
+                    const icon = issue.type === 'error' ? '🚫' : '⚠️';
+                    const borderColor = issue.type === 'error' ? 'var(--critical)' : 'var(--warning)';
+
+                    return `
+                        <div style="display: flex; align-items: start; gap: var(--space-3); padding: var(--space-3); background: var(--neutral-0); border-radius: var(--radius-small); border-left: 3px solid ${borderColor};">
+                            <span style="font-size: 1.25rem; line-height: 1;">${icon}</span>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600; color: var(--color-text-default); margin-bottom: var(--space-1);">${issue.title}</div>
+                                <div style="font-size: 0.875rem; color: var(--color-text-subdued); margin-bottom: var(--space-2);">${issue.message}</div>
+                                <div style="font-size: 0.875rem; color: var(--color-text-brand); font-weight: 500;">💡 ${issue.suggestion}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                issueSummary.style.display = 'block';
+            } else {
+                issueSummary.style.display = 'none';
+            }
+        }
+
+        function resetScorer() {
+            document.getElementById('copy-input').value = '';
+            crispSlider.value = 2;
+            upliftingSlider.value = 2;
+            groundedSlider.value = 2;
+            wittySlider.value = 0;
+
+            crispValue.textContent = '2';
+            upliftingValue.textContent = '2';
+            groundedValue.textContent = '2';
+            wittyValue.textContent = 'N/A';
+
+            document.getElementById('composite-score').textContent = '2.0';
+            document.getElementById('progress-bar').style.width = '66.67%';
+            document.getElementById('progress-bar').style.background = 'var(--color-background-success-default)';
+            document.getElementById('score-feedback').textContent = '';
+            document.getElementById('jargon-check').style.display = 'none';
+            document.getElementById('validation-results').style.display = 'none';
+            document.getElementById('improvement-summary').style.display = 'none';
+        }
+
+        // Demo Mode - Shows example audit results
+        function runDemoAudit() {
+            const persona = document.getElementById('figma-persona').value;
+
+            document.getElementById('figma-loading').style.display = 'block';
+            document.getElementById('figma-results').style.display = 'none';
+
+            // Simulate loading delay
+            setTimeout(() => {
+                const demoData = {
+                    totalItems: 12,
+                    issuesFound: 5,
+                    passedItems: 7,
+                    persona: persona,
+                    results: [
+                        {
+                            layerName: 'Welcome Headline',
+                            text: 'Welcome! You\'re going to love this product.',
+                            contentType: 'Success State',
+                            issueCount: 1,
+                            priority: 'P1',
+                            issues: [
+                                {
+                                    type: 'warning',
+                                    title: 'Presumptive Language',
+                                    message: 'Makes assumption about feelings',
+                                    suggestion: 'More grounded: "Welcome! Let\'s get started."'
+                                }
+                            ]
+                        },
+                        {
+                            layerName: 'CTA Button',
+                            text: 'Supercharge your workflow',
+                            contentType: 'Button',
+                            issueCount: 2,
+                            priority: 'P0',
+                            issues: [
+                                {
+                                    type: 'error',
+                                    title: 'Banned Words Detected',
+                                    message: '"supercharge"',
+                                    suggestion: 'Use plain language: "Speed up your work"'
+                                },
+                                {
+                                    type: 'warning',
+                                    title: 'Format Check',
+                                    message: 'Buttons should be 1-3 words',
+                                    suggestion: 'Shorten to "Get started" or "Try it"'
+                                }
+                            ]
+                        },
+                        {
+                            layerName: 'Error Message',
+                            text: 'Oops! Something went wrong.',
+                            contentType: 'Error Message',
+                            issueCount: 2,
+                            priority: 'P0',
+                            issues: [
+                                {
+                                    type: 'error',
+                                    title: 'Exclamation Marks',
+                                    message: 'Never use exclamation marks in error messages',
+                                    suggestion: 'Keep error messages calm and direct'
+                                },
+                                {
+                                    type: 'warning',
+                                    title: 'Format Check',
+                                    message: 'Error messages should offer a path forward',
+                                    suggestion: 'Example: "Couldn\'t save your changes. Try again?"'
+                                }
+                            ]
+                        },
+                        {
+                            layerName: 'Empty State Text',
+                            text: 'You haven\'t added anything yet',
+                            contentType: 'Empty State',
+                            issueCount: 1,
+                            priority: 'P1',
+                            issues: [
+                                {
+                                    type: 'warning',
+                                    title: 'Negative Framing',
+                                    message: 'Found: "you haven\'t"',
+                                    suggestion: 'Reframe positively: "Ready when you are! Add your first item."'
+                                }
+                            ]
+                        },
+                        {
+                            layerName: 'Marketing Copy',
+                            text: 'We empower teams to do their best work',
+                            contentType: 'Body Copy',
+                            issueCount: 1,
+                            priority: 'P2',
+                            issues: [
+                                {
+                                    type: 'warning',
+                                    title: 'Banned Words Detected',
+                                    message: '"empower"',
+                                    suggestion: 'Use plain language: "We help teams do their best work"'
+                                }
+                            ]
+                        },
+                        {
+                            layerName: 'Success Message',
+                            text: 'Well done! Your changes are saved.',
+                            contentType: 'Success State',
+                            issueCount: 0,
+                            priority: null
+                        },
+                        {
+                            layerName: 'Helper Text',
+                            text: 'Add at least 50 words to get started',
+                            contentType: 'Body Copy',
+                            issueCount: 0,
+                            priority: null
+                        },
+                        {
+                            layerName: 'Feature Description',
+                            text: 'Speed up your work with smart suggestions',
+                            contentType: 'Body Copy',
+                            issueCount: 0,
+                            priority: null
+                        },
+                        {
+                            layerName: 'Chat Response',
+                            text: 'I found 3 issues in your text',
+                            contentType: 'Chat/LLM Response',
+                            issueCount: 0,
+                            priority: null
+                        },
+                        {
+                            layerName: 'Secondary Button',
+                            text: 'Learn more',
+                            contentType: 'Button',
+                            issueCount: 0,
+                            priority: null
+                        },
+                        {
+                            layerName: 'Tooltip',
+                            text: 'Try something else',
+                            contentType: 'Microcopy',
+                            issueCount: 0,
+                            priority: null
+                        },
+                        {
+                            layerName: 'Confirmation Message',
+                            text: 'Nicely done. You\'re all set.',
+                            contentType: 'Success State',
+                            issueCount: 0,
+                            priority: null
+                        }
+                    ]
+                };
+
+                displayFigmaResults(demoData);
+            }, 800);
+        }
+
+        // Figma Audit Function
+        async function auditFigmaFrame() {
+            const figmaUrl = document.getElementById('figma-url').value.trim();
+            const persona = document.getElementById('figma-persona').value;
+
+            if (!figmaUrl) {
+                alert('Please enter a Figma URL or try Demo Mode first');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('figma-loading').style.display = 'block';
+            document.getElementById('figma-results').style.display = 'none';
+
+            try {
+                // Call backend API to extract and audit Figma content
+                const response = await fetch('http://localhost:3001/api/audit-figma', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ figmaUrl, persona })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch Figma content');
+                }
+
+                const data = await response.json();
+                displayFigmaResults(data);
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('figma-loading').style.display = 'none';
+                document.getElementById('figma-results').innerHTML = `
+                    <div class="alert warning">
+                        <strong>⚠️ Backend API Not Running</strong><br>
+                        <p style="margin-top: var(--space-2);">To use real Figma extraction, start the API server:</p>
+                        <div class="copy-block" style="margin: var(--space-3) 0; font-family: 'Monaco', monospace;">
+                            npm run dev:api
+                        </div>
+                        <p>The API server will run on port 3001 and connect to Figma MCP tools.</p>
+                        <p style="margin-top: var(--space-3);"><strong>For now, try "Demo Mode"</strong> to see how the audit works with example data.</p>
+                    </div>
+                `;
+                document.getElementById('figma-results').style.display = 'block';
+            }
+        }
+
+        function displayFigmaResults(data) {
+            document.getElementById('figma-loading').style.display = 'none';
+
+            const resultsDiv = document.getElementById('figma-results');
+            let html = `
+                <div class="card">
+                    <h2>📊 Audit Results</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-value">${data.totalItems || 0}</span>
+                            <span class="stat-label">Text Elements Found</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" style="color: var(--color-text-critical);">${data.issuesFound || 0}</span>
+                            <span class="stat-label">Issues Found</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" style="color: var(--color-text-success);">${data.passedItems || 0}</span>
+                            <span class="stat-label">Passed Checks</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Group results by priority
+            const critical = data.results?.filter(r => r.priority === 'P0') || [];
+            const high = data.results?.filter(r => r.priority === 'P1') || [];
+            const medium = data.results?.filter(r => r.priority === 'P2') || [];
+            const passed = data.results?.filter(r => r.issueCount === 0) || [];
+
+            // Critical Issues
+            if (critical.length > 0) {
+                html += `<div class="card"><h2><span class="badge danger">P0 - Critical</span> ${critical.length} items need immediate attention</h2>`;
+                critical.forEach(item => {
+                    html += renderAuditItem(item);
+                });
+                html += `</div>`;
+            }
+
+            // High Priority
+            if (high.length > 0) {
+                html += `<div class="card"><h2><span class="badge warning">P1 - High</span> ${high.length} items need revision</h2>`;
+                high.forEach(item => {
+                    html += renderAuditItem(item);
+                });
+                html += `</div>`;
+            }
+
+            // Medium Priority
+            if (medium.length > 0) {
+                html += `<div class="card"><h2><span class="badge info">P2 - Medium</span> ${medium.length} items to consider</h2>`;
+                medium.forEach(item => {
+                    html += renderAuditItem(item);
+                });
+                html += `</div>`;
+            }
+
+            // Passed Items
+            if (passed.length > 0) {
+                html += `
+                    <div class="card" style="background: var(--success-subdued); border-color: var(--success-border);">
+                        <h2>✅ ${passed.length} items passed all checks</h2>
+                        <details>
+                            <summary style="cursor: pointer; font-weight: 600; margin: var(--space-2) 0;">Show passed items</summary>
+                            ${passed.map(item => `<div class="copy-block success" style="margin: var(--space-2) 0;"><strong>${item.layerName}:</strong> "${item.text}"</div>`).join('')}
+                        </details>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = html;
+            resultsDiv.style.display = 'block';
+        }
+
+        function renderAuditItem(item) {
+            let issuesHtml = '';
+            if (item.issues && item.issues.length > 0) {
+                issuesHtml = item.issues.map(issue => {
+                    const icon = issue.type === 'error' ? '❌' : issue.type === 'warning' ? '⚠️' : 'ℹ️';
+                    return `
+                        <div class="alert ${issue.type === 'error' ? 'warning' : issue.type}" style="margin: var(--space-2) 0;">
+                            <strong>${icon} ${issue.title}:</strong> ${issue.message}<br>
+                            <small style="opacity: 0.8;">💡 ${issue.suggestion}</small>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            return `
+                <div class="audit-result ${item.issueCount > 0 ? 'misaligned' : 'strong'}" style="margin: var(--space-4) 0;">
+                    <div class="audit-header">
+                        <div>
+                            <h4 style="margin: 0;">${item.layerName || 'Text Element'}</h4>
+                            <small style="color: var(--color-text-subdued);">${item.contentType || 'Unknown type'}</small>
+                        </div>
+                        <span class="badge ${item.issueCount > 0 ? 'danger' : 'success'}">
+                            ${item.issueCount} issue${item.issueCount !== 1 ? 's' : ''}
+                        </span>
+                    </div>
+                    <div class="copy-block" style="margin: var(--space-3) 0;">
+                        "${item.text}"
+                    </div>
+                    ${issuesHtml}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
