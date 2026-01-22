@@ -1096,6 +1096,12 @@
                 <h3 style="margin-top: var(--space-6);">Figma URL</h3>
                 <input type="text" class="search-box" id="figma-url" placeholder="https://figma.com/design/...?node-id=123-456" style="margin-bottom: var(--space-4);">
 
+                <h3>Figma Personal Access Token</h3>
+                <input type="password" class="search-box" id="figma-token" placeholder="figd_..." style="margin-bottom: var(--space-2);">
+                <p style="font-size: 0.9rem; color: var(--color-text-subdued); margin-bottom: var(--space-4);">
+                    <a href="https://www.figma.com/settings" target="_blank" style="color: var(--brand-primary);">Get your token here</a> • Your token is never stored and only used for this request
+                </p>
+
                 <h3>Default Context (applies to all extracted copy)</h3>
                 <div class="score-input" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
                     <div class="score-item">
@@ -2040,10 +2046,16 @@
         // Figma Audit Function
         async function auditFigmaFrame() {
             const figmaUrl = document.getElementById('figma-url').value.trim();
+            const figmaToken = document.getElementById('figma-token').value.trim();
             const persona = document.getElementById('figma-persona').value;
 
             if (!figmaUrl) {
                 alert('Please enter a Figma URL or try Demo Mode first');
+                return;
+            }
+
+            if (!figmaToken) {
+                alert('Please enter your Figma Personal Access Token. Get one at https://www.figma.com/settings');
                 return;
             }
 
@@ -2052,18 +2064,24 @@
             document.getElementById('figma-results').style.display = 'none';
 
             try {
+                // Determine API URL (local dev vs deployed)
+                const apiUrl = window.location.hostname === 'localhost'
+                    ? 'http://localhost:3001/api/audit-figma'
+                    : '/api/audit-figma';
+
                 // Call backend API to extract and audit Figma content
-                const response = await fetch('http://localhost:3001/api/audit-figma', {
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ figmaUrl, persona })
+                    body: JSON.stringify({ figmaUrl, figmaToken, persona })
                 });
 
+                const data = await response.json();
+
                 if (!response.ok) {
-                    throw new Error('Failed to fetch Figma content');
+                    throw new Error(data.message || data.error || 'Failed to fetch Figma content');
                 }
 
-                const data = await response.json();
                 displayFigmaResults(data);
 
             } catch (error) {
@@ -2071,12 +2089,13 @@
                 document.getElementById('figma-loading').style.display = 'none';
                 document.getElementById('figma-results').innerHTML = `
                     <div class="alert warning">
-                        <strong>⚠️ Backend API Not Running</strong><br>
-                        <p style="margin-top: var(--space-2);">To use real Figma extraction, start the API server:</p>
-                        <div class="copy-block" style="margin: var(--space-3) 0; font-family: 'Monaco', monospace;">
-                            npm run dev:api
-                        </div>
-                        <p>The API server will run on port 3001 and connect to Figma MCP tools.</p>
+                        <strong>⚠️ Error: ${error.message}</strong><br>
+                        <p style="margin-top: var(--space-2);">Please check:</p>
+                        <ul style="margin: var(--space-2) 0; padding-left: var(--space-5);">
+                            <li>Your Figma access token is valid (get one at <a href="https://www.figma.com/settings" target="_blank" style="color: var(--brand-primary);">figma.com/settings</a>)</li>
+                            <li>The Figma URL is correct (should include node-id parameter)</li>
+                            <li>The API server is running (npm run dev:api)</li>
+                        </ul>
                         <p style="margin-top: var(--space-3);"><strong>For now, try "Demo Mode"</strong> to see how the audit works with example data.</p>
                     </div>
                 `;
